@@ -1,4 +1,3 @@
-
 services:
   api:
     build:
@@ -7,12 +6,19 @@ services:
     image: customer-churn-api
     ports:
       - "8000:8000"
+    environment:
+      MONITORING_DB_PATH: /app/monitoring-data/monitoring.db
+      DRIFT_BASELINE_PATH: /app/reports/drift_baseline.json
+    volumes:
+      - ./monitoring-data:/app/monitoring-data
+      - ./reports:/app/reports:ro
     restart: unless-stopped
 
   dashboard:
     build:
       context: .
       dockerfile: Dockerfile.dashboard
+    image: customer-churn-dashboard
     ports:
       - "8501:8501"
     environment:
