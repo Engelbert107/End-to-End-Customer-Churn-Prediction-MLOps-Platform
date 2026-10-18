@@ -90,7 +90,7 @@ The script should create the required data directory if it does not already exis
 Clone your repository and navigate to the project directory:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/Engelbert107/End-to-End-Customer-Churn-Prediction-MLOps-Platform.git
 cd Customer-Churn
 ```
 
