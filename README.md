@@ -60,7 +60,19 @@ The `TotalCharges` field is converted to a numeric representation, and missing n
 
 Dataset source: [Kaggle — Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
-Place the CSV file in `data/raw/` using the filename expected by the training script.
+### Dataset Setup
+
+The dataset is downloaded automatically using the provided Python download script and saved to `data/raw/` with the filename expected by the training pipeline.
+
+Before downloading, make sure you have:
+- Python and the project dependencies installed.
+- A Kaggle account and API credentials configured if required by the download method.
+
+Run the dataset download script before training the models. Once the dataset is downloaded, follow the training instructions below.
+
+```bash
+python scripts/download_data.py
+```
 
 ## Model Training and Evaluation
 
