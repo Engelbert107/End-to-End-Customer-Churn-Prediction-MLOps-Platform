@@ -18,7 +18,7 @@ st.set_page_config(
 )
 
 st.title("📊 Customer Churn Prediction")
-st.caption("End-to-end ML platform | Powered by your trained model")
+st.caption("End-to-end ML platform | Powered by our trained model")
 
 st.info(
     "Enter a customer's account and service details to estimate "
