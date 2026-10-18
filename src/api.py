@@ -11,7 +11,7 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.monitoring import get_metrics, record_prediction
+from src.monitoring import get_drift_metrics, get_metrics, record_prediction
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -170,4 +170,19 @@ def monitoring_metrics(
         raise HTTPException(
             status_code=500,
             detail="Unable to retrieve monitoring metrics.",
+        ) from exc
+
+
+@app.get("/monitoring/drift")
+def monitoring_drift(
+    days: int = Query(default=30, ge=1, le=365),
+):
+    """Compare recent prediction inputs with the training baseline."""
+    try:
+        return get_drift_metrics(days=days)
+    except Exception as exc:
+        logger.exception("Failed to calculate data drift.")
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to calculate data drift.",
         ) from exc

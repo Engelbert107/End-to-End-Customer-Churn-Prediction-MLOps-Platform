@@ -436,6 +436,86 @@ def show_monitoring_dashboard():
         )
 
     st.caption(metrics.get("note", ""))
+    
+    st.divider()
+    st.markdown("#### Training data drift detection")
+
+    try:
+        drift_response = requests.get(
+            f"{API_URL}/monitoring/drift",
+            params={"days": days},
+            timeout=REQUEST_TIMEOUT,
+        )
+        drift_response.raise_for_status()
+        drift = drift_response.json()
+
+        if drift.get("status") == "baseline_missing":
+            st.warning(drift.get("message", "Drift baseline is missing."))
+        else:
+            st.caption(
+                f"Baseline: {drift.get('baseline_source', 'unknown')} | "
+                f"Training rows: {drift.get('baseline_rows', 'unknown')} | "
+                f"Recent predictions: {drift.get('total_predictions', 0)}"
+            )
+
+            high, moderate, low = st.columns(3)
+            high.metric(
+                "High drift",
+                drift.get("high_drift_features", 0),
+            )
+            moderate.metric(
+                "Moderate drift",
+                drift.get("moderate_drift_features", 0),
+            )
+
+            feature_results = drift.get("features", [])
+            low_count = sum(
+                item.get("status") == "low"
+                for item in feature_results
+            )
+            low.metric("Low drift", low_count)
+
+            drift_df = pd.DataFrame(feature_results)
+
+            if not drift_df.empty:
+                display_df = drift_df.rename(
+                    columns={
+                        "feature": "Feature",
+                        "psi": "PSI score",
+                        "status": "Drift status",
+                        "baseline_count": "Baseline observations",
+                        "observed_count": "Recent observations",
+                    }
+                )
+
+                st.dataframe(
+                    display_df,
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+                scored_df = drift_df.dropna(subset=["psi"]).copy()
+
+                if not scored_df.empty:
+                    scored_df = scored_df.set_index("feature")
+                    st.markdown("##### Population Stability Index (PSI) scores by feature")
+                    st.bar_chart(scored_df[["psi"]])
+
+            if drift.get("total_predictions", 0) < 100:
+                st.info(
+                    "The recent sample is small. Treat PSI scores as "
+                    "preliminary and avoid drawing strong conclusions."
+                )
+
+            st.caption(
+                "Rule-of-thumb interpretation: PSI below 0.10 is low, "
+                "0.10–0.20 is moderate, and 0.20 or higher is high. "
+                "These are heuristics, not universal thresholds."
+            )
+
+    except requests.exceptions.RequestException as exc:
+        st.error(f"Could not load drift results: {exc}")
+
 
     st.warning(
         "Monitoring limitation: feature distributions are aggregate "
