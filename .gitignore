@@ -1,0 +1,33 @@
+
+# Virtual environments
+.mlop_venv/
+mlop_venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Secrets and Kaggle credentials
+.mlop_venv
+.mlop_venv.*
+.kaggle/
+kaggle.json
+
+# Data files
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Generated experiment artifacts (for later stages)
+mlruns/
+artifacts/
+reports/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

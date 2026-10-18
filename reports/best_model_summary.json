@@ -1,0 +1,8 @@
+{
+  "selection_metric": "roc_auc",
+  "best_model": "XGBoost",
+  "best_roc_auc": 0.8438231419049833,
+  "train_rows": 5634,
+  "test_rows": 1409,
+  "random_state": 42
+}

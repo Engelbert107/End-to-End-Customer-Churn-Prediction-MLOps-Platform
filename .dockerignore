@@ -1,0 +1,12 @@
+
+.mlop_venv/
+.venv/
+__pycache__/
+.pytest_cache/
+.git/
+.DS_Store
+mlruns/
+mlflow.db
+data/
+reports/
+tests/

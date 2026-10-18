@@ -1,0 +1,17 @@
+pandas
+kaggle
+pytest
+pandas
+kaggle
+pytest
+scikit-learn
+xgboost
+joblib
+mlflow
+fastapi
+uvicorn[standard]
+httpx
+httpx2
+fastapi
+streamlit
+requests
